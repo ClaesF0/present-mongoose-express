@@ -1,21 +1,25 @@
 import express from 'express';
-import mongoose from 'mongoose';
-import morgan from 'morgan';
+import mongoose from 'mongoose'
+import morgan from 'morgan'
 import bodyParser from "body-parser";
+import dotenv from 'dotenv';
 
+dotenv.config()
 // creating my express server
 const app = express();
 const PORT = 7777;
 
 // using morgan for logs
-app.use(morgan('combined'))
-app.use(bodyParser.urlencoded({extended:true}));
-app.use(bodyParser.json());
+app.use(morgan('combined'));
 
-// create a schema for the devices collection
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+// create a schema for the car collection
 const DeviceSchema = new mongoose.Schema({
-    device_name: String,
-    price: Number
+    car_make: String,
+    car_model: String,
+    car_top_speed: Number,
+    car_year_of_manufacture: Number
 });
 
 // create a model based on the schema
@@ -25,7 +29,8 @@ const Device = mongoose.model('Device', DeviceSchema);
 mongoose.Promise = global.Promise;
 mongoose.set("strictQuery", false);
 
-mongoose.connect('mongodb://0.0.0.0:27017/test-db-devices-noroff', {
+console.log(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { //this sets the envirnorment
     useNewUrlParser: true,
     useUnifiedTopology: true
 });
@@ -37,6 +42,7 @@ db.once('open', function() {
 
 // create a new device
 app.post('/createdevice', async (req, res) => {
+    console.log(req.body)
     const device = new Device(req.body);
     try {
         const savedDevice = await device.save();
