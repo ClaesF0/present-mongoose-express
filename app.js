@@ -40,13 +40,7 @@ db.once('open', function() {
     console.log("We're connected to the database <3 <3 !");
 });
 
-app.get('/', (req, res) => {
-    res.send("Hello I am working deployed database with /");
-});
 
-app.get('*', (req, res) => {
-    res.send("Hello I am working deployed database with *");
-});
 
 // create a new device
 app.post('/createdevice', async (req, res) => {
@@ -94,4 +88,12 @@ app.delete('/device/:id', async (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`> Ready on http://localhost:${PORT}`);
+});
+
+app.get('/', (req, res) => {
+    res.send("Hello I am working deployed database with /");
+});
+
+app.get('*', (req, res) => {
+    res.send("Hello I am working deployed database with *");
 });
